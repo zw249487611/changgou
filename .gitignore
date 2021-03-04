@@ -1,2 +1,3 @@
 # Project exclude paths
 /changgou-parent/changgou_eureka/target/
+/.idea/
