@@ -1,7 +1,9 @@
-package com.changgou.goods.pojo;
+package com.changgou.goods.goods.pojo;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Data;
+import lombok.ToString;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -9,9 +11,13 @@ import java.io.Serializable;
  * @author 黑马架构师2.5
  *
  */
+@Data
+@ToString
+@Entity
 @Table(name="tb_brand")
 public class Brand implements Serializable {
 
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Id
 	private Integer id;//品牌id
 
