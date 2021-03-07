@@ -1,7 +1,10 @@
 package com.changgou.goods.dao;
 
-import com.changgou.goods.goods.pojo.Brand;
+import com.changgou.goods.pojo.Brand;
+import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
+
+import java.util.List;
 
 /**
  * Dao使用通用Mapper，Dao接口需要继承tk.mybatis.mapper.common.Mapper
@@ -18,4 +21,13 @@ import tk.mybatis.mapper.common.Mapper;
  *  还需要再启动类上启动通用mapper
  */
 public interface BrandMapper extends Mapper<Brand> {
+
+
+    /**
+     * 根据分类id查询品牌集合
+     * @param categoryid:分类集合
+     * @return
+     */
+    @Select("select tb.* from tb_brand tb,tb_category_brand tcb where tb.id=tcb.brand_id and tcb.category_id=#{pid}")
+    List<Brand> findByCategory(Integer categoryid);
 }

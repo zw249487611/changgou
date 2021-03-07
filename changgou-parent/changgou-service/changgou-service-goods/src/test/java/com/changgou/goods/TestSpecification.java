@@ -1,7 +1,6 @@
 package com.changgou.goods;
 
-import com.changgou.goods.dao.BrandRepository;
-import com.changgou.goods.goods.pojo.Brand;
+import com.changgou.goods.pojo.Brand;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,13 +18,12 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class TestSpecification {
 
-    @Autowired
+   /* @Autowired
     private BrandRepository brandRepository;
 
     @Test
@@ -65,9 +62,9 @@ public class TestSpecification {
         }
     }
 
-    /**
+    *//**
      * 分页+条件查询
-     */
+     *//*
     @Test
     public void TestPageAndSpec() {
         Brand brand = new Brand();
@@ -87,5 +84,5 @@ public class TestSpecification {
             System.out.println(brand1);
 
         }
-    }
+    }*/
 }

@@ -1,108 +1,147 @@
 package com.changgou.goods.controller;
 
-import com.changgou.goods.entity.PageResult;
-import com.changgou.goods.entity.Result;
-import com.changgou.goods.entity.StatusCode;
-import com.changgou.goods.goods.pojo.Brand;
+import com.changgou.goods.pojo.Brand;
 import com.changgou.goods.service.BrandService;
 import com.github.pagehelper.PageInfo;
-import io.swagger.models.auth.In;
+import com.changgou.goods.entity.Result;
+import com.changgou.goods.entity.StatusCode;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
-/**
- * 跨域:A域名访问B域名的数据
- *      域名或者请求端口或者协议不一致的时候，就跨域了
- *         www.itheima.com  html www.itcast.cn
- *         ……
- *
- */
+/****
+ * @Author:shenkunlin
+ * @Description:
+ * @Date 2019/6/14 0:18
+ *****/
+@Api(value = "BrandController")
 @RestController
-@RequestMapping(value = "/brand")
-@CrossOrigin //跨域
+@RequestMapping("/brand")
+@CrossOrigin
 public class BrandController {
 
     @Autowired
     private BrandService brandService;
-    /**
-     * 查询所有品牌
+
+    /***
+     * Brand分页条件搜索实现
+     * @param brand
+     * @param page
+     * @param size
+     * @return
      */
-    @GetMapping
-    public Result<List<Brand>> findAll() {
-        List<Brand> brandList = brandService.findAll();
-        return new Result(true, StatusCode.OK,"查询成功",brandList) ;
+    @ApiOperation(value = "Brand条件分页查询",notes = "分页条件查询Brand方法详情",tags = {"BrandController"})
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "page", value = "当前页", required = true, dataType = "Integer"),
+            @ApiImplicitParam(paramType = "path", name = "size", value = "每页显示条数", required = true, dataType = "Integer")
+    })
+    @PostMapping(value = "/search/{page}/{size}" )
+    public Result<PageInfo> findPage(@RequestBody(required = false) @ApiParam(name = "Brand对象",value = "传入JSON数据",required = false) Brand brand, @PathVariable  int page, @PathVariable  int size){
+        //调用BrandService实现分页条件查询Brand
+        PageInfo<Brand> pageInfo = brandService.findPage(brand, page, size);
+        return new Result(true,StatusCode.OK,"查询成功",pageInfo);
     }
 
-    /**
-     * 根据id查询商品品牌
+    /***
+     * Brand分页搜索实现
+     * @param page:当前页
+     * @param size:每页显示多少条
+     * @return
      */
-
-    @GetMapping(value = "/{id}")
-    public Result<Brand> findById(@PathVariable(value = "id") Integer id) {
-
-        Brand brand = brandService.findById(id);
-        return new Result<Brand>(true, StatusCode.OK, "根据id查询成功", brand);
+    @ApiOperation(value = "Brand分页查询",notes = "分页查询Brand方法详情",tags = {"BrandController"})
+    @ApiImplicitParams({
+            @ApiImplicitParam(paramType = "path", name = "page", value = "当前页", required = true, dataType = "Integer"),
+            @ApiImplicitParam(paramType = "path", name = "size", value = "每页显示条数", required = true, dataType = "Integer")
+    })
+    @GetMapping(value = "/search/{page}/{size}" )
+    public Result<PageInfo> findPage(@PathVariable  int page, @PathVariable  int size){
+        //调用BrandService实现分页查询Brand
+        PageInfo<Brand> pageInfo = brandService.findPage(page, size);
+        return new Result<PageInfo>(true,StatusCode.OK,"查询成功",pageInfo);
     }
 
-    /**
-     * 增加品牌
+    /***
+     * 多条件搜索品牌数据
+     * @param brand
+     * @return
      */
-    @PostMapping
-    public Result add(@RequestBody Brand brand){
-        brandService.add(brand);
-        return new Result(true,StatusCode.OK,"添加成功");
+    @ApiOperation(value = "Brand条件查询",notes = "条件查询Brand方法详情",tags = {"BrandController"})
+    @PostMapping(value = "/search" )
+    public Result<List<Brand>> findList(@RequestBody(required = false) @ApiParam(name = "Brand对象",value = "传入JSON数据",required = false) Brand brand){
+        //调用BrandService实现条件查询Brand
+        List<Brand> list = brandService.findList(brand);
+        return new Result<List<Brand>>(true,StatusCode.OK,"查询成功",list);
     }
 
-    /**
-     * 增加品牌
+    /***
+     * 根据ID删除品牌数据
+     * @param id
+     * @return
      */
-    @PutMapping(value = "/{id}")
-    public Result update(@PathVariable(value = "id") Integer id, @RequestBody Brand brand){
+    @ApiOperation(value = "Brand根据ID删除",notes = "根据ID删除Brand方法详情",tags = {"BrandController"})
+    @ApiImplicitParam(paramType = "path", name = "id", value = "主键ID", required = true, dataType = "Integer")
+    @DeleteMapping(value = "/{id}" )
+    public Result delete(@PathVariable Integer id){
+        //调用BrandService实现根据主键删除
+        brandService.delete(id);
+        return new Result(true,StatusCode.OK,"删除成功");
+    }
+
+    /***
+     * 修改Brand数据
+     * @param brand
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "Brand根据ID修改",notes = "根据ID修改Brand方法详情",tags = {"BrandController"})
+    @ApiImplicitParam(paramType = "path", name = "id", value = "主键ID", required = true, dataType = "Integer")
+    @PutMapping(value="/{id}")
+    public Result update(@RequestBody @ApiParam(name = "Brand对象",value = "传入JSON数据",required = false) Brand brand,@PathVariable Integer id){
+        //设置主键值
         brand.setId(id);
-
+        //调用BrandService实现修改Brand
         brandService.update(brand);
         return new Result(true,StatusCode.OK,"修改成功");
     }
 
-    /**
-     * 删除品牌
+    /***
+     * 新增Brand数据
+     * @param brand
+     * @return
      */
-    @DeleteMapping(value = "/{id}")
-    public Result delete(@PathVariable(value = "id") Integer id) {
-        brandService.delete(id);
-        return new Result(true,StatusCode.OK,"删除成功哦");
+    @ApiOperation(value = "Brand添加",notes = "添加Brand方法详情",tags = {"BrandController"})
+    @PostMapping
+    public Result add(@RequestBody  @ApiParam(name = "Brand对象",value = "传入JSON数据",required = true) Brand brand){
+        //调用BrandService实现添加Brand
+        brandService.add(brand);
+        return new Result(true,StatusCode.OK,"添加成功");
     }
 
-    /**
-     * 多条件查询
+    /***
+     * 根据ID查询Brand数据
+     * @param id
+     * @return
      */
-    @PostMapping(value = "/search" )
-    public Result<List<Brand>> findList(@RequestBody Brand brand) {
-        List<Brand> list = brandService.findList(brand);
-        return new Result<List<Brand>>(true, StatusCode.OK, "根据条件查询成功", list);
-
+    @ApiOperation(value = "Brand根据ID查询",notes = "根据ID查询Brand方法详情",tags = {"BrandController"})
+    @ApiImplicitParam(paramType = "path", name = "id", value = "主键ID", required = true, dataType = "Integer")
+    @GetMapping("/{id}")
+    public Result<Brand> findById(@PathVariable Integer id){
+        //调用BrandService实现根据主键查询Brand
+        Brand brand = brandService.findById(id);
+        return new Result<Brand>(true,StatusCode.OK,"查询成功",brand);
     }
 
-    /**
-     * 分页查询
+    /***
+     * 查询Brand全部数据
+     * @return
      */
-    @GetMapping(value = "/search/{page}/{size}")
-    public Result<Page<Brand>> findPage(@PathVariable("page") Integer page, @PathVariable("size") Integer size) {
-        Page<Brand> brandPage = brandService.findPage(page, size);
-        return new Result<Page<Brand>>(true, StatusCode.OK, "分页查询成功啦", brandPage);
+    @ApiOperation(value = "查询所有Brand",notes = "查询所Brand有方法详情",tags = {"BrandController"})
+    @GetMapping
+    public Result<List<Brand>> findAll(){
+        //调用BrandService实现查询所有Brand
+        List<Brand> list = brandService.findAll();
+        return new Result<List<Brand>>(true, StatusCode.OK,"查询成功",list) ;
     }
-
-    /**
-     * 分页+条件查询
-     */
-    @PostMapping(value = "/search/{page}/{size}")
-    public Result<Page<Brand>> findPage(@RequestBody Brand brand,@PathVariable("page") Integer page, @PathVariable("size") Integer size) {
-        Page<Brand> brandPage = brandService.findPage(brand,page, size);
-        return new Result<Page<Brand>>(true, StatusCode.OK, "分页查询成功啦", brandPage);
-    }
-
 }
