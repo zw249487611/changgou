@@ -1,5 +1,6 @@
 package com.changgou.goods.service;
 
+import com.changgou.goods.pojo.Goods;
 import com.changgou.goods.pojo.Sku;
 import com.github.pagehelper.PageInfo;
 
@@ -66,4 +67,6 @@ public interface SkuService {
      * @return
      */
     List<Sku> findAll();
+
+
 }

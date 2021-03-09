@@ -1,8 +1,13 @@
 package com.changgou.goods.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.changgou.goods.dao.BrandMapper;
+import com.changgou.goods.dao.CategoryMapper;
+import com.changgou.goods.dao.SkuMapper;
 import com.changgou.goods.dao.SpuMapper;
-import com.changgou.goods.pojo.Spu;
+import com.changgou.goods.pojo.*;
 import com.changgou.goods.service.SpuService;
+import com.changgou.goods.util.IdWorker;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /****
  * @Author:shenkunlin
@@ -23,6 +31,17 @@ public class SpuServiceImpl implements SpuService {
     @Autowired
     private SpuMapper spuMapper;
 
+    @Autowired
+    private IdWorker idWorker;
+
+    @Autowired
+    private SkuMapper skuMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
+
+    @Autowired
+    private BrandMapper brandMapper;
 
     /**
      * Spu条件+分页查询
@@ -214,5 +233,181 @@ public class SpuServiceImpl implements SpuService {
     @Override
     public List<Spu> findAll() {
         return spuMapper.selectAll();
+    }
+
+    /**
+     * 添加商品信息
+     */
+    @Override
+    public void saveGoods(Goods goods) {
+        //Spu->一个
+        Spu spu = goods.getSpu();
+        //根据传入的id是否有值，来判断是新增还是修改
+        if (spu.getId() == null) {
+            //为空，则为增加
+            spu.setId(String.valueOf(idWorker.nextId()));
+            spuMapper.insertSelective(spu);
+        } else {
+            //否则修改
+            spuMapper.updateByPrimaryKeySelective(spu);
+            //删除之前的List<Sku> delete from tb_sku where spi_id = ?
+            Sku sku = new Sku();
+            sku.setSpuId(spu.getId());
+            skuMapper.delete(sku);
+        }
+        //保存
+        //Sku->List集合
+        Date date = new Date();
+        //3级分类
+        Category category = categoryMapper.selectByPrimaryKey(spu.getCategory3Id());
+
+        //查询品牌信息
+        Brand brand = brandMapper.selectByPrimaryKey(spu.getBrandId());
+        List<Sku> skuList = goods.getSkuList();
+        for (Sku sku : skuList) {
+            sku.setId(String.valueOf(idWorker.nextId()));
+            //要获取SPec的值,
+            String name = spu.getName();
+            //防止空指针
+            if (StringUtils.isEmpty(sku.getSpec())) {
+                sku.setSpec("{}");
+            }
+            //将SPec传承MAp
+            Map<String,String> specMap = JSON.parseObject(sku.getSpec(), Map.class);
+            for (Map.Entry<String, String> entry : specMap.entrySet()) {
+                name += " " + entry.getValue();
+            }
+            sku.setName(name);//spuname+sku参数的分项
+            sku.setCreateTime(date);
+            sku.setUpdateTime(date);
+            sku.setSpuId(spu.getId());
+            sku.setCategoryId(spu.getCategory3Id());//fenleiID->3级分类ID
+            sku.setCategoryName(category.getName());//分类名称->3级分类名称
+            sku.setBrandName(brand.getName());//品牌名称
+
+            //将sku添加到数据库中
+            int i = skuMapper.insertSelective(sku);
+            System.out.println("是否保存成功了："+i);
+        }
+    }
+    /**
+     * 根据id查询Goods的数据
+     */
+    @Override
+    public Goods findGoodsById(Long id) {
+        //查询spu
+        Spu spu = spuMapper.selectByPrimaryKey(id);
+        //查询List<Sku> -> spuId  select * from tb_sku where spu_id=?
+        Sku sku = new Sku();
+        sku.setSpuId(spu.getId());
+        List<Sku> skuList = skuMapper.select(sku);
+        Goods goods = new Goods();
+        goods.setSpu(spu);
+        goods.setSkuList(skuList);
+
+        return goods;
+    }
+
+    /**
+     * 商品审核
+     */
+    @Override
+    public void audit(Long spuId) {
+       //查询商品
+        Spu spu = spuMapper.selectByPrimaryKey(spuId);
+        //判断商品是否符合审核条件
+        if (spu.getIsDelete().equalsIgnoreCase("1")) {
+            throw new RuntimeException("不能对已删除的商品进行审核");
+        }
+       //修改审核状态
+        spu.setStatus("1");
+        spu.setIsMarketable("1");
+        spuMapper.updateByPrimaryKeySelective(spu);
+    }
+
+    /**
+     * 商品下架
+     * @param spuId
+     */
+    @Override
+    public void pull(Long spuId) {
+        //查询商品
+        Spu spu = spuMapper.selectByPrimaryKey(spuId);
+        //判断商品是否符合审核条件
+        if (spu.getIsDelete().equalsIgnoreCase("1")) {
+            throw new RuntimeException("不能对已删除的商品进行下架");
+        }
+        if (spu.getStatus().equals("1")) {
+            throw new RuntimeException("不能对未通过审核的商品进行下架");
+        }
+        //修改下架状态
+        spu.setIsMarketable("0");
+        spuMapper.updateByPrimaryKeySelective(spu);
+    }
+
+    /**
+     * 批量上架
+     * @param spuIds
+     */
+    @Override
+    public void pullMany(Long[] spuIds) {
+        //update tb_sku set IsMarkettable = 1 where id in (ids) and isDelete = 0 and status =1
+        Example example = new Example(Spu.class);
+        Example.Criteria criteria = example.createCriteria();
+
+        //id in
+        criteria.andIn("id", Arrays.asList(spuIds));
+        //未删除
+        criteria.andEqualTo("isDelete", "0");
+        //已审核
+        criteria.andEqualTo("status", "1");
+
+        //准备修改的数据
+        Spu spu = new Spu();
+        spu.setIsMarketable("0");
+        spuMapper.updateByExampleSelective(spu, example);
+    }
+    /**
+     * 商品上架
+     * @param spuId
+     */
+    @Override
+    public void put(Long spuId) {
+        //查询商品
+        Spu spu = spuMapper.selectByPrimaryKey(spuId);
+        //判断商品是否符合审核条件
+        if (spu.getIsDelete().equals("1")) {
+            throw new RuntimeException("不能对已删除的商品进行下架");
+        }
+
+        if (spu.getStatus().equals("1")) {
+            throw new RuntimeException("不能对未通过审核的商品进行下架");
+        }
+        //修改下架状态
+        spu.setIsMarketable("1");
+        spuMapper.updateByPrimaryKeySelective(spu);
+    }
+
+    /**
+     * 批量上架
+     * @param spuIds
+     */
+    @Override
+    public void putMany(Long[] spuIds) {
+        //update tb_sku set IsMarkettable = 1 where id in (ids) and isDelete = 0 and status =1
+        Example example = new Example(Spu.class);
+        Example.Criteria criteria = example.createCriteria();
+
+        //id in
+        criteria.andIn("id", Arrays.asList(spuIds));
+        //未删除
+        criteria.andEqualTo("isDelete", "0");
+        //已审核
+        criteria.andEqualTo("status", "1");
+
+        //准备修改的数据
+        Spu spu = new Spu();
+        spu.setIsMarketable("1");
+        spuMapper.updateByExampleSelective(spu, example);
     }
 }

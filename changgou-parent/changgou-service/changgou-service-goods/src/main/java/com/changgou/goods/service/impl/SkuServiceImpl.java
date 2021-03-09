@@ -1,8 +1,11 @@
 package com.changgou.goods.service.impl;
 
 import com.changgou.goods.dao.SkuMapper;
+import com.changgou.goods.pojo.Goods;
 import com.changgou.goods.pojo.Sku;
+import com.changgou.goods.pojo.Spu;
 import com.changgou.goods.service.SkuService;
+import com.changgou.goods.util.IdWorker;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,11 @@ public class SkuServiceImpl implements SkuService {
 
     @Autowired
     private SkuMapper skuMapper;
+
+    @Autowired
+    private IdWorker idWorker;
+
+
 
 
     /**
@@ -207,4 +215,6 @@ public class SkuServiceImpl implements SkuService {
     public List<Sku> findAll() {
         return skuMapper.selectAll();
     }
+
+
 }

@@ -1,7 +1,9 @@
 package com.changgou.goods.service.impl;
 
 import com.changgou.goods.dao.BrandMapper;
+import com.changgou.goods.dao.CategoryMapper;
 import com.changgou.goods.pojo.Brand;
+import com.changgou.goods.pojo.Category;
 import com.changgou.goods.service.BrandService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -22,6 +24,9 @@ public class BrandServiceImpl implements BrandService {
 
     @Autowired
     private BrandMapper brandMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
 
 
     /**
@@ -146,5 +151,16 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public List<Brand> findAll() {
         return brandMapper.selectAll();
+    }
+
+    /**
+     * 根据分类id查询品牌集合
+     * @param categoryid:分类集合
+     * @return
+     */
+    @Override
+    public List<Brand> findByCategory(Integer categoryid) {
+
+        return brandMapper.findByCategory(categoryid);
     }
 }

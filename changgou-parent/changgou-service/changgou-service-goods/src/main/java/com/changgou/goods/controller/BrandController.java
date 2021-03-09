@@ -144,4 +144,16 @@ public class BrandController {
         List<Brand> list = brandService.findAll();
         return new Result<List<Brand>>(true, StatusCode.OK,"查询成功",list) ;
     }
+
+    /**
+     * 根据分类id查询品牌集合
+     *
+     * @param categoryid:分类集合
+     * @return
+     */
+    @GetMapping(value = "/category/{id}")
+    public Result<List<Brand>> findBrandByCategoryId(@PathVariable("id") Integer categoryid) {
+        List<Brand> brandList = brandService.findByCategory(categoryid);
+        return new Result<List<Brand>>(true, StatusCode.OK,"查询成功",brandList) ;
+    }
 }
