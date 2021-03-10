@@ -1,5 +1,5 @@
 package com.changgou.goods.dao;
-import com.changgou.goods.pojo.UndoLog;
+import com.changgou.search.pojo.UndoLog;
 import tk.mybatis.mapper.common.Mapper;
 
 /****

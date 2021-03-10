@@ -2,8 +2,7 @@ package com.changgou.goods.service.impl;
 
 import com.changgou.goods.dao.BrandMapper;
 import com.changgou.goods.dao.CategoryMapper;
-import com.changgou.goods.pojo.Brand;
-import com.changgou.goods.pojo.Category;
+import com.changgou.search.pojo.Brand;
 import com.changgou.goods.service.BrandService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

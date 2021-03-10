@@ -1,7 +1,7 @@
 package com.changgou.goods.service;
 
-import com.changgou.goods.pojo.Goods;
-import com.changgou.goods.pojo.Spu;
+import com.changgou.search.pojo.Goods;
+import com.changgou.search.pojo.Spu;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;

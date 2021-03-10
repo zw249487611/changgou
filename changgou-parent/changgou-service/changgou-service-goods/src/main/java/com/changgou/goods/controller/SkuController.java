@@ -1,10 +1,10 @@
 package com.changgou.goods.controller;
 
-import com.changgou.goods.pojo.Sku;
-import com.changgou.goods.service.SkuService;
-import com.github.pagehelper.PageInfo;
 import com.changgou.goods.entity.Result;
 import com.changgou.goods.entity.StatusCode;
+import com.changgou.goods.service.SkuService;
+import com.changgou.search.pojo.Sku;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class SkuController {
     public Result<PageInfo> findPage(@RequestBody(required = false) @ApiParam(name = "Sku对象",value = "传入JSON数据",required = false) Sku sku, @PathVariable  int page, @PathVariable  int size){
         //调用SkuService实现分页条件查询Sku
         PageInfo<Sku> pageInfo = skuService.findPage(sku, page, size);
-        return new Result(true,StatusCode.OK,"查询成功",pageInfo);
+        return new Result(true, StatusCode.OK,"查询成功",pageInfo);
     }
 
     /***

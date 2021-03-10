@@ -1,8 +1,8 @@
 package com.changgou.goods.service.impl;
 
 import com.changgou.goods.dao.UndoLogMapper;
-import com.changgou.goods.pojo.UndoLog;
 import com.changgou.goods.service.UndoLogService;
+import com.changgou.search.pojo.UndoLog;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

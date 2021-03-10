@@ -1,6 +1,6 @@
 package com.changgou.goods.service;
 
-import com.changgou.goods.pojo.Album;
+import com.changgou.search.pojo.Album;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;

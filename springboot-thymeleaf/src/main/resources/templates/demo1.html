@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--引入thymeleaf标签-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thymeleaf模板引擎案例</title>
+</head>
+<body>
+    <!--thymeleaf标签使用：需要再指定的 标签上使用thymeleaf相关的语法
+    th:text：输出文本内容
+
+    -->
+    啦啦啦搜素搜素<div th:text="${message}"></div>
+    <hr>
+    "th:action" :指定表单提交的路径
+    <div>
+        <form id="login-form" th:action="@{/test/hello}" >
+            <input th:type="text"  th:name="id">
+            <button>提交</button>
+        </form>
+    </div>
+<hr>
+<div>
+    th:each循环标签
+    <table>
+        <tr>
+            <td>下标</td>
+            <td>id</td>
+            <td>name</td>
+            <td>address</td>
+        </tr>
+        <!--循环-->
+        <tr th:each="user,userSta:${users}" >
+            <td th:text="${userSta.index}"></td>
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.address}"></td>
+        </tr>
+    </table>
+</div>
+    <hr>
+    <div>
+        读取map两种方式
+            （1）：知道map的key，直接根据key获取数据<br>
+            (2):不知道map的key,使用循环的方式获取key,然后获取value
+        <h5>方式1</h5>
+        <div>
+            获取Key=No的值：<span th:text="${dataMap.No}"></span><br>
+            获取Key=address的值：<span th:text="${dataMap.address}"></span><br>
+        </div>
+        <h5>方式2</h5>
+        <div th:each="map:${dataMap}">
+            <span th:text="${map.key}"></span>
+            <span th:text="${map.value}"></span>
+
+        </div>
+    </div>
+<hr>
+    <div>
+        <span th:text="${#dates.format(now,'yyyy-MM-dd hh:ss:mm')}"></span>
+    </div>
+<hr>
+    <div>
+        <span th:if="${(age>=18)}">终于长大了！</span>
+    </div>
+
+<hr>
+    <div id="A" th:include="footer::copy"></div>
+</body>
+</html>

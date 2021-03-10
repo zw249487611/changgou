@@ -1,10 +1,10 @@
 package com.changgou.goods.controller;
 
-import com.changgou.goods.pojo.Brand;
-import com.changgou.goods.service.BrandService;
-import com.github.pagehelper.PageInfo;
 import com.changgou.goods.entity.Result;
 import com.changgou.goods.entity.StatusCode;
+import com.changgou.search.pojo.Brand;
+import com.changgou.goods.service.BrandService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class BrandController {
     public Result<PageInfo> findPage(@RequestBody(required = false) @ApiParam(name = "Brand对象",value = "传入JSON数据",required = false) Brand brand, @PathVariable  int page, @PathVariable  int size){
         //调用BrandService实现分页条件查询Brand
         PageInfo<Brand> pageInfo = brandService.findPage(brand, page, size);
-        return new Result(true,StatusCode.OK,"查询成功",pageInfo);
+        return new Result(true, StatusCode.OK,"查询成功",pageInfo);
     }
 
     /***

@@ -1,6 +1,6 @@
 package com.changgou.goods.controller;
 
-import com.changgou.goods.pojo.CategoryBrand;
+import com.changgou.search.pojo.CategoryBrand;
 import com.changgou.goods.service.CategoryBrandService;
 import com.github.pagehelper.PageInfo;
 import com.changgou.goods.entity.Result;

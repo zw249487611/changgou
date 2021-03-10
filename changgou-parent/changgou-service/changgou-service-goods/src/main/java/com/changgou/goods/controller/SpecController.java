@@ -1,10 +1,10 @@
 package com.changgou.goods.controller;
 
-import com.changgou.goods.pojo.Spec;
-import com.changgou.goods.service.SpecService;
-import com.github.pagehelper.PageInfo;
 import com.changgou.goods.entity.Result;
 import com.changgou.goods.entity.StatusCode;
+import com.changgou.goods.service.SpecService;
+import com.changgou.search.pojo.Spec;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class SpecController {
     public Result<PageInfo> findPage(@RequestBody(required = false) @ApiParam(name = "Spec对象",value = "传入JSON数据",required = false) Spec spec, @PathVariable  int page, @PathVariable  int size){
         //调用SpecService实现分页条件查询Spec
         PageInfo<Spec> pageInfo = specService.findPage(spec, page, size);
-        return new Result(true,StatusCode.OK,"查询成功",pageInfo);
+        return new Result(true, StatusCode.OK,"查询成功",pageInfo);
     }
 
     /***

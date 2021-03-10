@@ -1,11 +1,9 @@
 package com.changgou.goods.service.impl;
 
 import com.changgou.goods.dao.SkuMapper;
-import com.changgou.goods.pojo.Goods;
-import com.changgou.goods.pojo.Sku;
-import com.changgou.goods.pojo.Spu;
-import com.changgou.goods.service.SkuService;
 import com.changgou.goods.util.IdWorker;
+import com.changgou.search.pojo.Sku;
+import com.changgou.goods.service.SkuService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

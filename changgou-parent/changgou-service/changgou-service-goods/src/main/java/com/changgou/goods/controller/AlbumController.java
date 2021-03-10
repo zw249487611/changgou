@@ -1,10 +1,10 @@
 package com.changgou.goods.controller;
 
-import com.changgou.goods.pojo.Album;
-import com.changgou.goods.service.AlbumService;
-import com.github.pagehelper.PageInfo;
 import com.changgou.goods.entity.Result;
 import com.changgou.goods.entity.StatusCode;
+import com.changgou.search.pojo.Album;
+import com.changgou.goods.service.AlbumService;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class AlbumController {
     public Result<PageInfo> findPage(@RequestBody(required = false) @ApiParam(name = "Album对象",value = "传入JSON数据",required = false) Album album, @PathVariable  int page, @PathVariable  int size){
         //调用AlbumService实现分页条件查询Album
         PageInfo<Album> pageInfo = albumService.findPage(album, page, size);
-        return new Result(true,StatusCode.OK,"查询成功",pageInfo);
+        return new Result(true, StatusCode.OK,"查询成功",pageInfo);
     }
 
     /***

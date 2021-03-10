@@ -1,4 +1,4 @@
-package com.changgou.goods.pojo;
+package com.changgou.search.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,10 +1,10 @@
 package com.changgou.goods.controller;
 
-import com.changgou.goods.pojo.Pref;
-import com.changgou.goods.service.PrefService;
-import com.github.pagehelper.PageInfo;
 import com.changgou.goods.entity.Result;
 import com.changgou.goods.entity.StatusCode;
+import com.changgou.goods.service.PrefService;
+import com.changgou.search.pojo.Pref;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class PrefController {
     public Result<PageInfo> findPage(@RequestBody(required = false) @ApiParam(name = "Pref对象",value = "传入JSON数据",required = false) Pref pref, @PathVariable  int page, @PathVariable  int size){
         //调用PrefService实现分页条件查询Pref
         PageInfo<Pref> pageInfo = prefService.findPage(pref, page, size);
-        return new Result(true,StatusCode.OK,"查询成功",pageInfo);
+        return new Result(true, StatusCode.OK,"查询成功",pageInfo);
     }
 
     /***
