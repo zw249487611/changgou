@@ -1,8 +1,8 @@
 package com.changgou.goods.service.impl;
 
 import com.changgou.goods.dao.SkuMapper;
-import com.changgou.goods.util.IdWorker;
-import com.changgou.search.pojo.Sku;
+import com.changgou.goods.pojo.Sku;
+import com.changgou.util.IdWorker;
 import com.changgou.goods.service.SkuService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.Map;
 
 /****
  * @Author:shenkunlin
@@ -212,6 +213,31 @@ public class SkuServiceImpl implements SkuService {
     @Override
     public List<Sku> findAll() {
         return skuMapper.selectAll();
+    }
+
+    /**
+     * 商品递减
+     * @param decrmap
+     */
+    @Override
+    public void decrCount(Map<String, Integer> decrmap) {
+        for (Map.Entry<String, Integer> entry : decrmap.entrySet()) {
+            //商品id
+            String id = entry.getKey();
+            //递减数据
+//            Object obj = entry.getValue();
+//            Integer num = Integer.valueOf(obj.toString());
+            Integer num = Integer.valueOf(entry.getValue());
+            //库存数量->=递减数量
+
+            //采用行级锁控制超卖
+                //update tb_sku set num =#{num} where id =#{id} and num >=#{num}
+                //数据库中每条记录都拥有行级锁，此时只能允许一个失误修改改记录，只有等该事务结束，其他失误才能操作改记录
+            int count = skuMapper.decrCount(id, num);
+            if (count <= 0) {
+                throw new RuntimeException("对不起，库存不足，请回滚！");
+            }
+        }
     }
 
 

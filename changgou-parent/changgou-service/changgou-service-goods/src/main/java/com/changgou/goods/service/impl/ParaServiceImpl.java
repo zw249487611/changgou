@@ -2,8 +2,8 @@ package com.changgou.goods.service.impl;
 
 import com.changgou.goods.dao.CategoryMapper;
 import com.changgou.goods.dao.ParaMapper;
-import com.changgou.search.pojo.Category;
-import com.changgou.search.pojo.Para;
+import com.changgou.goods.pojo.Category;
+import com.changgou.goods.pojo.Para;
 import com.changgou.goods.service.ParaService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

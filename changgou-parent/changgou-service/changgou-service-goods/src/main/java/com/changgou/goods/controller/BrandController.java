@@ -1,8 +1,8 @@
 package com.changgou.goods.controller;
 
-import com.changgou.goods.entity.Result;
-import com.changgou.goods.entity.StatusCode;
-import com.changgou.search.pojo.Brand;
+import com.changgou.entity.Result;
+import com.changgou.entity.StatusCode;
+import com.changgou.goods.pojo.Brand;
 import com.changgou.goods.service.BrandService;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;

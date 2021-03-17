@@ -1,8 +1,8 @@
 package com.changgou.goods.service.impl;
 
 import com.changgou.goods.dao.CategoryBrandMapper;
+import com.changgou.goods.pojo.CategoryBrand;
 import com.changgou.goods.service.CategoryBrandService;
-import com.changgou.search.pojo.CategoryBrand;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;

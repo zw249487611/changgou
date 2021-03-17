@@ -1,11 +1,11 @@
 package com.changgou.search.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.changgou.goods.entity.Result;
+import com.changgou.entity.Result;
 import com.changgou.goods.feign.SkuFeign;
-import com.changgou.search.pojo.Sku;
+import com.changgou.goods.pojo.Sku;
 import com.changgou.search.dao.SkuEsMapper;
-import com.changgou.goods.pojo.SkuInfo;
+import com.changgou.search.pojo.SkuInfo;
 import com.changgou.search.service.SkuService;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.search.SearchResponse;
@@ -27,6 +27,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.SearchResultMapper;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
@@ -348,11 +349,6 @@ public class SkuServiceImpl implements SkuService {
 
 
 
-
-
-
-
-
         //分析结果
 
         //分页参数--总记录数
@@ -367,6 +363,16 @@ public class SkuServiceImpl implements SkuService {
         resultMap.put("rows", contents);
         resultMap.put("total", totalElements);
         resultMap.put("totalPages", totalPages);
+
+        //获取搜索封装信息
+        NativeSearchQuery query = builder.build();
+        Pageable pageable = query.getPageable();
+        int pageSize = pageable.getPageSize();
+        int pageNumber = pageable.getPageNumber();
+
+
+        resultMap.put("pageSize", pageSize);
+        resultMap.put("pageNumber", pageNumber);
         return resultMap;
     }
 

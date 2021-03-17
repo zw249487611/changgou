@@ -1,8 +1,8 @@
 package com.changgou.search.controller;
 
+import com.changgou.entity.Result;
+import com.changgou.entity.StatusCode;
 import com.changgou.search.file.FastDFSFile;
-import com.changgou.goods.entity.Result;
-import com.changgou.goods.entity.StatusCode;
 import com.changgou.search.util.FastDFSUtil;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;

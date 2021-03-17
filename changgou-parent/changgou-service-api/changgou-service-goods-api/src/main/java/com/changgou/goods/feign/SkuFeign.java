@@ -1,12 +1,15 @@
 package com.changgou.goods.feign;
 
-import com.changgou.goods.entity.Result;
-import com.changgou.search.pojo.Sku;
+import com.changgou.entity.Result;
+import com.changgou.goods.pojo.Sku;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 远程调用
@@ -22,4 +25,20 @@ public interface SkuFeign {
     @GetMapping
     Result<List<Sku>> findAll();
 
+    /***
+     * 根据ID查询Sku数据
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    Result<Sku> findById(@PathVariable String id);
+
+
+    /**
+     * 商品信息递减
+     * Map<Key,Value> :key，要递减的商品ID
+     *                  value:要递减的数量
+     */
+    @GetMapping("/decr/count")
+    public Result decrCount(@RequestParam Map<String, Integer> decrmap);
 }

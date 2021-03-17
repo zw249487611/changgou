@@ -1,10 +1,10 @@
 package com.changgou.goods.controller;
 
-import com.changgou.goods.entity.Result;
-import com.changgou.goods.entity.StatusCode;
-import com.changgou.search.pojo.Goods;
+import com.changgou.entity.Result;
+import com.changgou.entity.StatusCode;
+import com.changgou.goods.pojo.Goods;
+import com.changgou.goods.pojo.Spu;
 import com.changgou.goods.service.SpuService;
-import com.changgou.search.pojo.Spu;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;

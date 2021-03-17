@@ -1,5 +1,5 @@
 package com.changgou.goods.dao;
-import com.changgou.search.pojo.Category;
+import com.changgou.goods.pojo.Category;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 

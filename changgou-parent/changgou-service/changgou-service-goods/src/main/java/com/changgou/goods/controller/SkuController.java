@@ -1,15 +1,16 @@
 package com.changgou.goods.controller;
 
-import com.changgou.goods.entity.Result;
-import com.changgou.goods.entity.StatusCode;
+import com.changgou.entity.Result;
+import com.changgou.entity.StatusCode;
+import com.changgou.goods.pojo.Sku;
 import com.changgou.goods.service.SkuService;
-import com.changgou.search.pojo.Sku;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /****
  * @Author:shenkunlin
@@ -24,6 +25,18 @@ public class SkuController {
 
     @Autowired
     private SkuService skuService;
+
+    /**
+     * 商品信息递减
+     * Map<Key,Value> :key，要递减的商品ID
+     *                  value:要递减的数量
+     */
+    @GetMapping("/decr/count")
+    public Result decrCount(@RequestParam Map<String,Integer> decrmap) {
+        //调用service,递减
+        skuService.decrCount(decrmap);
+        return new Result(true, StatusCode.OK, "");
+    }
 
     /***
      * Sku分页条件搜索实现

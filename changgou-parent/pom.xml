@@ -16,6 +16,7 @@
         <module>changgou-common-db</module>
         <module>changgou-service-api</module>
         <module>changgou-web</module>
+        <module>changgou-user-oauth</module>
     </modules>
 
     <parent>
@@ -55,6 +56,11 @@
             <version>2.6.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.0</version>
+        </dependency>
         <!--
             http://localhost:9011/swagger-ui.html
         -->

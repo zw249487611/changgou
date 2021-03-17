@@ -1,5 +1,5 @@
 package com.changgou.goods.dao;
-import com.changgou.search.pojo.Template;
+import com.changgou.goods.pojo.Template;
 import tk.mybatis.mapper.common.Mapper;
 
 /****

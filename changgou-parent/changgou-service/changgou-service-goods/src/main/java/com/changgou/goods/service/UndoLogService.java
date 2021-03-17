@@ -1,6 +1,6 @@
 package com.changgou.goods.service;
 
-import com.changgou.search.pojo.UndoLog;
+import com.changgou.goods.pojo.UndoLog;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
